@@ -25,7 +25,7 @@ $StorageAccount = New-AzStorageAccount -ResourceGroupName $resourceGroupName -Na
 $ctx = $storageAccount.Context
 $tableName = "AzureADAuditLogs"
 New-AzStorageTable –Name $tableName –Context $ctx
-$runBookContentUri = "https://gist.githubusercontent.com/MarcCharmois/0054fc0e20f26afc3161d9397c16d083/raw/cf2d51da869c01be1f1df4277282029c94529aeb/Store%2520Azure%2520AD%2520Audit%2520logs%2520Runbook%25201"
+$runBookContentUri = "https://gist.githubusercontent.com/MarcCharmois/0054fc0e20f26afc3161d9397c16d083/raw/6fa6f92aeeba53aa47a8575e664f3b71df44588e/Store%2520Azure%2520AD%2520Audit%2520logs%2520Runbook%25201"
 Invoke-WebRequest -Uri $runBookContentUri -OutFile 'C:\dev\Test-exportAzureadauditlogs.ps1'
 $RBName = "exportAzureADAuditLogs"
 $params = @{
