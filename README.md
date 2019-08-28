@@ -33,12 +33,12 @@ To make this work you must:
 </ul>
 
 ## Warning
-<b>This is a tutorial or a proof of concept. Do not never, ever do what we are going to do in a real IT department</b>:
+<b>This is a tutorial or a proof of concept. Do not never, ever use this design in a real IT department</b>:
 <ul>
 <li>
-We are going to use the AzureADPreview module the use of which is not allowed for production matters.
+This design uses the AzureADPreview module the use of which is not allowed for production matters.
 </li>
 <li>
-The code use the Global Administrator credentials in the runbook that is strictly a bad idea, because, in a real company, if a malicious people can have access to the runbook and change the code (that is quite easy) , this people could perform catastrophies regarding Azure environements in this company.  
+This design uses the Global Administrator credentials in the runbook that is strictly a bad idea, because, in a real company, if a malicious people can have access to the runbook and change the code (that is quite easy) , this people could perform catastrophies regarding Azure environements in this company.  
 </li>
 </ul>
