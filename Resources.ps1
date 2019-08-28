@@ -56,3 +56,43 @@ $params = @{
     'Published'             = $true
 }
 Import-AzAutomationRunbook @params
+
+$job = Start-AzAutomationRunbook -Name $RBName -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
+
+Get-AzAutomationJob -JobId $job.JobId -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
+
+Get-AzAutomationJob -JobId $job.JobId -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName | Get-AzAutomationJobOutput
+
+# Waiting for job completion
+$timeCount = 0
+do{
+   #loop body instructions
+   Start-Sleep -s 1
+   $timeCount++
+   Write-Output ("waited " + $timeCount + " second(s)")
+   $job2 = Get-AzAutomationJob -JobId $job.JobId -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
+   if($job2.Status -ne "Completed"){
+        Write-Output ("job status is " + $job2.Status + " and not completed")
+   }else{
+        Write-Output ("job status is " + $job2.Status + ". Writing Job information and  Output for checking...")
+   }
+}while($job2.Status -ne "Completed")
+$job2 = Get-AzAutomationJob -JobId $job.JobId -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
+$job2
+if($job2.Exception -eq $null){
+    Write-Output ("job completed with no exceptions")
+}else{
+    Write-Output ("job exceptions: " + $job2.Exception)
+}
+# Full job output 
+$jobOutPut = Get-AzAutomationJobOutput -AutomationAccountName $automationAccountName -Id $job.JobId -ResourceGroupName $resourceGroupName -Stream "Any" | Get-AzAutomationJobOutputRecord
+$index=0
+foreach ($item in $jobOutPut){
+    $index++
+    Write-Output "---------------------------------"
+    Write-Output ("output " + $index)
+    foreach ($subItem in $item){
+        Write-Output ($subItem.Value)
+    }
+
+}
