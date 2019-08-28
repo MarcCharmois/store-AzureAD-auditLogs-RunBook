@@ -16,7 +16,7 @@ The PowerShell script will:
 
    </ul>
 </li>
-<li>add credentials and variables to the Automation Account.</li>
+<li>add credentials and variables into the Automation Account.</li>
 <li>import the code of the runbook from a gist.</li>
 <li>execute the runbook to import the Azure AD Audit logs from Azure Active Directory and store them into the Azure Storage Table.
 </li>
