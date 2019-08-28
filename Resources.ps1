@@ -1,11 +1,11 @@
-﻿$tenantDomain = "charmoisdev"
+﻿$tenantDomain = "contoso" #type your tenant name here (contoso if contoso.onmicrosoft.com, lower case, letter and number only)
 $location ="francecentral"
-$subscriptionId = "b50c6341-bf22-4c10-8d4d-34c9e4179513"
-$subscriptionName="Admin"
+$subscriptionId = "" #the Id of the subscription  where you want to create automation account and storage account ex : b50c6341-bf22-4c10-8d4d-34c9e4179522
+$subscriptionName=""  #the name of the subscription where you want to create automation account and storage account
 $resourceGroupName = "azureADAuditLogs"
 $automationAccountName ="adlogs-automationAccount"
 $automationCredentialsName = "azureADConnectAccount"
-$storageAccountNameSuffix = "adlogs2"
+$storageAccountNameSuffix = "adlogs2" #increment the number each time you perform a new test (except if you delete the storage account after each test)
 $storageaccountname = $tenantDomain + $storageAccountNameSuffix
 $tableName = "azureADAuditLogs"
 $RBName = "exportAzureADAuditLogs"
