@@ -2,7 +2,7 @@
 
 ## Description: 
 
-PowerShell code to create resource and execute runbook to store Azure AD Audit Logs into an Azure Storage Account Table
+PowerShell code to create resources and execute runbook to store Azure AD Audit Logs into an Azure Storage Account Table
 
 ## Design
 The PowerShell script will:
@@ -39,6 +39,6 @@ To make this work you must:
 This design uses the AzureADPreview module the use of which is not allowed for production matters.
 </li>
 <li>
-This design uses the Global Administrator credentials in the runbook that is strictly a bad idea, because, in a real company, if a malicious people can have access to the runbook and change the code (that is quite easy) , this people could perform catastrophies regarding Azure environements in this company.  
+This design uses the Global Administrator credentials for the runbook authentication that is strictly a bad idea, because, in a real company, if a malicious people can have access to the runbook and change the code (that is quite easy) , this people could perform catastrophies regarding Azure environements in this company.  
 </li>
 </ul>
