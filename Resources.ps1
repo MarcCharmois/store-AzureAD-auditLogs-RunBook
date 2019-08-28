@@ -1,4 +1,4 @@
-﻿$tenantDomain = "contoso" #type your tenant name here (contoso if contoso.onmicrosoft.com, lower case, letter and number only)
+﻿$tenantDomain = "" #type your tenant name here (contoso if contoso.onmicrosoft.com, lower case, letter and number only)
 $location ="francecentral"
 $subscriptionId = "" #the Id of the subscription  where you want to create automation account and storage account ex : b50c6341-bf22-4c10-8d4d-34c9e4179522
 $subscriptionName=""  #the name of the subscription where you want to create automation account and storage account
@@ -43,7 +43,7 @@ $StorageAccount = New-AzStorageAccount -ResourceGroupName $resourceGroupName -Na
 $ctx = $storageAccount.Context
 
 New-AzStorageTable -Name $tableName -Context $ctx
-$runBookContentUri = "https://gist.githubusercontent.com/MarcCharmois/0054fc0e20f26afc3161d9397c16d083/raw/7a529279d176416c61dea9e07fe641113f20a87c/Store%2520Azure%2520AD%2520Audit%2520logs%2520Runbook%25201"
+$runBookContentUri = "https://gist.githubusercontent.com/MarcCharmois/0054fc0e20f26afc3161d9397c16d083/raw/8ac0bf3a7d445aaba8a072c769591582acb83e9b/Store%2520Azure%2520AD%2520Audit%2520logs%2520Runbook%25201"
 Invoke-WebRequest -Uri $runBookContentUri -OutFile 'C:\dev\Test-exportAzureadauditlogs.ps1'
 
 $params = @{
