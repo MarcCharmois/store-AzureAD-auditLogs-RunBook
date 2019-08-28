@@ -59,10 +59,6 @@ Import-AzAutomationRunbook @params
 
 $job = Start-AzAutomationRunbook -Name $RBName -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
 
-Get-AzAutomationJob -JobId $job.JobId -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
-
-Get-AzAutomationJob -JobId $job.JobId -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName | Get-AzAutomationJobOutput
-
 # Waiting for job completion
 $timeCount = 0
 do{
@@ -86,13 +82,12 @@ if($job2.Exception -eq $null){
 }
 # Full job output 
 $jobOutPut = Get-AzAutomationJobOutput -AutomationAccountName $automationAccountName -Id $job.JobId -ResourceGroupName $resourceGroupName -Stream "Any" | Get-AzAutomationJobOutputRecord
+$jobOutPut = ($jobOutPut | ConvertTo-Json) | ConvertFrom-Json
 $index=0
+
 foreach ($item in $jobOutPut){
     $index++
     Write-Output "---------------------------------"
     Write-Output ("output " + $index)
-    foreach ($subItem in $item){
-        Write-Output ($subItem.Value)
-    }
-
+    Write-Output ($item.Value)
 }
