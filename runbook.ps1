@@ -1,6 +1,7 @@
 Import-Module -Name AzureADPreview
 #Get the credentials encrypted by script
-$creds = Get-AutomationPSCredential -Name 'AzureADConnectAccount'
+$automationCredentialsName =  Get-AutomationVariable -Name "automationCredentialsName"
+$creds = Get-AutomationPSCredential -Name $automationCredentialsName
 
 #Connect to Azure AD
 Connect-AzureAD -Credential $creds
@@ -10,16 +11,18 @@ $AuditLogs = get-azureadauditdirectorylogs
 #Connect to Azure tenant
 Add-AzureRMAccount -Credential $creds
 #Set the storage account subscription
-Select-AzureRMSubscription -subscriptionName "Admin"
+$subscriptionName = Get-AutomationVariable -Name 'subscriptionName'
+Select-AzureRMSubscription -subscriptionName $subscriptionName
 #Get key to storage account
-$acctKeys = (Get-AzureRmStorageAccountKey -Name "charmoisdevadlogs1" -ResourceGroupName "azureADAuditLogs")
+$resourceGroupName = Get-AutomationVariable -Name 'resourceGroupName'
+$storageAccountName = Get-AutomationVariable -Name 'storageAccountName'
+$acctKeys = (Get-AzureRmStorageAccountKey -Name $storageAccountName -ResourceGroupName $resourceGroupName)
 $acctKey = $acctKeys.Key1
 #Set the storage context
-$storageContext = New-AzureStorageContext -StorageAccountName "charmoisdevadlogs1" -StorageAccountKey $acctKey
+$storageContext = New-AzureStorageContext -StorageAccountName storageAccountName -StorageAccountKey $acctKey
 #Get the storage table
-$tableName = "AzureADAuditLogs"
-$storageTable = Get-AzureStorageTable –Name $tableName –Context $storageContext
-$storageTable
+$tableName = Get-AutomationVariable -Name "tableName"
+$storageTable = Get-AzureStorageTable -Name $tableName -Context $storageContext
 write-output $AuditLogs
 foreach( $operation in $AuditLogs){
     $partitionKey1 = "AD Audit Logs"

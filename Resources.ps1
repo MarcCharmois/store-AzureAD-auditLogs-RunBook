@@ -1,9 +1,21 @@
+ï»¿$tenantDomain = "charmoisdev"
 $location ="francecentral"
+$subscriptionId = "b50c6341-bf22-4c10-8d4d-34c9e4179513"
+$subscriptionName="Admin"
 $resourceGroupName = "azureADAuditLogs"
+$automationAccountName ="adlogs-automationAccount"
+$automationCredentialsName = "azureADConnectAccount"
+$storageAccountNameSuffix = "adlogs2"
+$storageaccountname = $tenantDomain + $storageAccountNameSuffix
+$tableName = "azureADAuditLogs"
+$RBName = "exportAzureADAuditLogs"
+
+
+
 Get-AzSubscription
-Set-AzContext -Subscription b50c6341-bf22-4c10-8d4d-34c9e4179513
-get-azcontext
-$automationAccountName ="ADLogs-automationAccount"
+Set-AzContext -Subscription $subscriptionId
+Get-azcontext
+
 New-AzResourceGroup -Name $resourceGroupName -location $Location 
 New-AzAutomationAccount -ResourceGroupName $resourceGroupName -Name $automationAccountName -Location $Location -Plan Free
 
@@ -17,17 +29,23 @@ $uriModuleStorageTable = (Find-Module $ModuleStorageTable).RepositorySourceLocat
 $uriModuleStorageTable
 New-AzAutomationModule -Name $ModuleStorageTable -ContentLinkUri $uriModuleStorageTable -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
 
-New-AzAutomationCredential -Name  'AzureADConnectAccount' -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName -Value (Get-Credential)
-$tenantDomain = "charmoisdev"
-$storageaccountname = $tenantDomain + "adlogs1"
-$storageaccountname
+New-AzAutomationCredential -Name  $automationCredentialsName -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName -Value (Get-Credential)
+
+New-AzAutomationVariable -AutomationAccountName $automationAccountName -Name "subscriptionName" -Encrypted $False -Value $subscriptionName -ResourceGroupName $resourceGroupName
+New-AzAutomationVariable -AutomationAccountName $automationAccountName -Name "resourceGroupName" -Encrypted $False -Value $resourceGroupName -ResourceGroupName $resourceGroupName
+New-AzAutomationVariable -AutomationAccountName $automationAccountName -Name "storageAccountName" -Encrypted $False -Value $storageaccountname -ResourceGroupName $resourceGroupName
+New-AzAutomationVariable -AutomationAccountName $automationAccountName -Name "automationCredentialsName" -Encrypted $False -Value $automationCredentialsName -ResourceGroupName $resourceGroupName
+New-AzAutomationVariable -AutomationAccountName $automationAccountName -Name "tableName" -Encrypted $False -Value $tableName -ResourceGroupName $resourceGroupName
+
+
+
 $StorageAccount = New-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageaccountname -Location $location -SkuName Standard_RAGRS -Kind StorageV2
 $ctx = $storageAccount.Context
-$tableName = "AzureADAuditLogs"
-New-AzStorageTable –Name $tableName –Context $ctx
+
+New-AzStorageTable -Name $tableName -Context $ctx
 $runBookContentUri = "https://gist.githubusercontent.com/MarcCharmois/0054fc0e20f26afc3161d9397c16d083/raw/6fa6f92aeeba53aa47a8575e664f3b71df44588e/Store%2520Azure%2520AD%2520Audit%2520logs%2520Runbook%25201"
 Invoke-WebRequest -Uri $runBookContentUri -OutFile 'C:\dev\Test-exportAzureadauditlogs.ps1'
-$RBName = "exportAzureADAuditLogs"
+
 $params = @{
     'Path'                  = 'C:\dev\Test-exportAzureadauditlogs.ps1'
     'Description'           = 'export Azure AD Audit logs in a Azure Storage Account Table'
