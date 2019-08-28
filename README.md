@@ -1,5 +1,10 @@
-# store Azure AD audit Logs RunBook
-PowerShell code to store Azure AD Audit Logs into an Azure Storage Account Table
+# Store Azure AD audit Logs RunBook
+
+## Description: 
+
+PowerShell code to create resource and execute runbook to store Azure AD Audit Logs into an Azure Storage Account Table
+
+## Design
 The PowerShell script will:
 <ul>
 <li> create resources:
@@ -16,4 +21,24 @@ The PowerShell script will:
 <li>execute the runbook to import the Azure AD Audit logs from Azure Active Directory and store them into the Azure Storage Table.
 </li>
 <li>display the result of the runbook job.</li>
+</ul>
+
+## Prerequisites: 
+To make this work you must:
+<ul>
+<li>Have access to an Azure tenant and to an Azure subscription of that tenant.</li>
+<li>Have a Global Administrator account for that tenant.</li>
+<li>Have the Azure AD Audit logs non empty (you can manually create user in Azure AD if needed or <a href="https://mosshowto.blogspot.com/2019/08/create-user-azure-ad-powershell.html">use this post to it using PowerShell</a>).</li>
+<li>Have a local PowerShell environement with new Az module installed and working properly.</li>
+</ul>
+
+## Warning
+<b>This is a tutorial or a proof of concept. Do not never, ever do what we are going to do in a real IT department</b>:
+<ul>
+<li>
+We are going to use the AzureADPreview module the use of which is not allowed for production matters.
+</li>
+<li>
+The code use the Global Administrator credentials in the runbook that is strictly a bad idea, because, in a real company, if a malicious people can have access to the runbook and change the code (that is quite easy) , this people could perform catastrophies regarding Azure environements in this company.  
+</li>
 </ul>
