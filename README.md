@@ -1,4 +1,4 @@
-# Store Azure AD audit Logs RunBook
+# Store Azure AD audit Logs in an Azure Storage table using a PowerShell RunBook
 
 ## Description: 
 
