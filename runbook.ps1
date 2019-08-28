@@ -19,7 +19,7 @@ $storageAccountName = Get-AutomationVariable -Name 'storageAccountName'
 $acctKeys = (Get-AzureRmStorageAccountKey -Name $storageAccountName -ResourceGroupName $resourceGroupName)
 $acctKey = $acctKeys.Key1
 #Set the storage context
-$storageContext = New-AzureStorageContext -StorageAccountName storageAccountName -StorageAccountKey $acctKey
+$storageContext = New-AzureStorageContext -StorageAccountName $storageAccountName -StorageAccountKey $acctKey
 #Get the storage table
 $tableName = Get-AutomationVariable -Name "tableName"
 $storageTable = Get-AzureStorageTable -Name $tableName -Context $storageContext
