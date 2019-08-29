@@ -1,9 +1,9 @@
 ﻿$tenantDomain = "" #type your tenant name here (contoso if contoso.onmicrosoft.com, lower case, letter and number only)
-$location ="francecentral" #change for the location closer to your place if needed
+$location = "francecentral" #change for the location closer to your place if needed
 $subscriptionId = "" #the Id of the subscription  where you want to create automation account and storage account ex : b50c6341-bf22-4c10-8d4d-34c9e4179522
-$subscriptionName=""  #the name of the subscription where you want to create automation account and storage account
+$subscriptionName = ""  #the name of the subscription where you want to create automation account and storage account
 $resourceGroupName = "azureADAuditLogs"
-$automationAccountName ="adlogs-automationAccount"
+$automationAccountName = "adlogs-automationAccount"
 $automationCredentialsName = "azureADConnectAccount"
 $storageAccountNameSuffix = "adlogs2" #increment the number each time you perform a new test (except if you delete the storage account after each test)
 $storageaccountname = $tenantDomain + $storageAccountNameSuffix
@@ -25,7 +25,7 @@ $uriModuleADPreview
 New-AzAutomationModule -Name $ModuleADPreview -ContentLinkUri $uriModuleADPreview -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
 
 $ModuleStorageTable = "AzureRmStorageTable"
-$uriModuleStorageTable = (Find-Module $ModuleStorageTable).RepositorySourceLocation + 'package/' + $ModuleStorageTable +'/1.0.0.23'
+$uriModuleStorageTable = (Find-Module $ModuleStorageTable).RepositorySourceLocation + 'package/' + $ModuleStorageTable + '/1.0.0.23'
 $uriModuleStorageTable
 New-AzAutomationModule -Name $ModuleStorageTable -ContentLinkUri $uriModuleStorageTable -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
 
@@ -61,31 +61,33 @@ $job = Start-AzAutomationRunbook -Name $runbookName -ResourceGroupName $resource
 
 # Waiting for job completion
 $timeCount = 0
-do{
-   #loop body instructions
-   Start-Sleep -s 1
-   $timeCount++
-   Write-Output ("waited " + $timeCount + " second(s)")
-   $job2 = Get-AzAutomationJob -JobId $job.JobId -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
-   if($job2.Status -ne "Completed"){
+do {
+    #loop body instructions
+    Start-Sleep -s 1
+    $timeCount++
+    Write-Output ("waited " + $timeCount + " second(s)")
+    $job2 = Get-AzAutomationJob -JobId $job.JobId -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
+    if ($job2.Status -ne "Completed") {
         Write-Output ("job status is " + $job2.Status + " and not completed")
-   }else{
+    }
+    else {
         Write-Output ("job status is " + $job2.Status + ". Writing Job information and  Output for checking...")
-   }
-}while($job2.Status -ne "Completed")
+    }
+}while ($job2.Status -ne "Completed")
 $job2 = Get-AzAutomationJob -JobId $job.JobId -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
 $job2
-if($job2.Exception -eq $null){
+if ($job2.Exception -eq $null) {
     Write-Output ("job completed with no exceptions")
-}else{
+}
+else {
     Write-Output ("job exceptions: " + $job2.Exception)
 }
 # Full job output 
 $jobOutPut = Get-AzAutomationJobOutput -AutomationAccountName $automationAccountName -Id $job.JobId -ResourceGroupName $resourceGroupName -Stream "Any" | Get-AzAutomationJobOutputRecord
 $jobOutPut = ($jobOutPut | ConvertTo-Json) | ConvertFrom-Json
-$index=0
+$index = 0
 
-foreach ($item in $jobOutPut){
+foreach ($item in $jobOutPut) {
     $index++
     Write-Output "---------------------------------"
     Write-Output ("output " + $index)
