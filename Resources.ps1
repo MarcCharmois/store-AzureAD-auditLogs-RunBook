@@ -1,5 +1,5 @@
 ﻿$tenantDomain = "" #type your tenant name here (contoso if contoso.onmicrosoft.com, lower case, letter and number only)
-$location ="francecentral"
+$location ="francecentral" #change for the location closer to your place if needed
 $subscriptionId = "" #the Id of the subscription  where you want to create automation account and storage account ex : b50c6341-bf22-4c10-8d4d-34c9e4179522
 $subscriptionName=""  #the name of the subscription where you want to create automation account and storage account
 $resourceGroupName = "azureADAuditLogs"
@@ -8,7 +8,7 @@ $automationCredentialsName = "azureADConnectAccount"
 $storageAccountNameSuffix = "adlogs2" #increment the number each time you perform a new test (except if you delete the storage account after each test)
 $storageaccountname = $tenantDomain + $storageAccountNameSuffix
 $tableName = "azureADAuditLogs"
-$RBName = "exportAzureADAuditLogs"
+$runbookName = "exportAzureADAuditLogs"
 
 
 
@@ -49,7 +49,7 @@ Invoke-WebRequest -Uri $runBookContentUri -OutFile 'C:\dev\Test-exportAzureadaud
 $params = @{
     'Path'                  = 'C:\dev\Test-exportAzureadauditlogs.ps1'
     'Description'           = 'export Azure AD Audit logs in a Azure Storage Account Table'
-    'Name'                  = $RBName
+    'Name'                  = $runbookName
     'Type'                  = 'PowerShell'
     'ResourceGroupName'     = $resourceGroupName
     'AutomationAccountName' = $automationAccountName
@@ -57,7 +57,7 @@ $params = @{
 }
 Import-AzAutomationRunbook @params
 
-$job = Start-AzAutomationRunbook -Name $RBName -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
+$job = Start-AzAutomationRunbook -Name $runbookName -ResourceGroupName $resourceGroupName -AutomationAccountName $automationAccountName
 
 # Waiting for job completion
 $timeCount = 0
